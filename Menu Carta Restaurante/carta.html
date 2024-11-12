@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="style.css">
+        <title>Menú - Joel Hernández Sierra</title>
+    </head>
+
+    <body>
+        <div id="bodyMenu">
+            <header>
+                <div class="topnav">
+                    <a href="index.html">Inicio</a>
+                    <a class="active" href="carta.html">Menu</a>  
+                </div>
+                <h1 id="titulo"> NUESTRO MENÚ</h1>
+            </header>
+
+
+            <br>
+
+                <div class="plato">
+
+                    <div class="platoDER">
+
+                        
+
+                        <img src="img/chinchulines.jpg" alt="img-chinchulines">
+                        <div class="plato1">
+                            <h2>ENTRADAS</h2>     
+                                <h3>Chinchulines 5,50€</h3>
+                                    <p>(Porcion de Chinchulines acompañada de guarnición.)</p>
+                                <h3>Chicharroncitos 7€</h3>
+                                    <p>(Porción de trozos de cocina acompañada de guarnición.)</p>
+                                <h3>Chorizo Argento 5,50€</h3>
+                                    <p>(Dos chorizos servidos en rodaja).</p>
+                                <h3>Nuggets de Pollo 7€</h3>
+                                    <p>(Bastones de pechuga empanizados acompañados de papas a la francesa).</p>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="plato">
+                    <div class="platoIZQ">
+                        
+                            <img src="img/papas-francesa.jpg" alt="img-papas">
+                            <div class="plato2">
+                            <h2>GUARNICIONES</h2>
+                            
+                                <h3>Papa tradicional. 2€</h3>    
+                                <h3>Papas a la Francesa. 5,50€</h3>
+                                <h3>Papa con Sour Cream. 5,50€ </h3>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="plato">
+                    <div class="platoDER">  
+                        
+                            <img src="img/bebidas.jpg" alt="img-bebidas">
+                            <div class="plato2">
+                            <h2>BEBIDAS</h2>
+                            
+                                <h3>Gaseosa linea Coca-Cola. 3€</h3>    
+                                <h3>Agua con gas. 2,70€</h3>
+                                <h3>Agua sin gas. 2,50€</h3>
+                                <h3>Cerveza Quilmes. 4,50€</h3>
+                        </div>  
+                    </div>
+                </div>
+
+                <div class="plato">
+                    <div class="platoIZQ">
+                        
+                            <img src="img/flan.jpg" alt="img-flan">
+                            <div class="plato2">
+                            <h2>POSTRES</h2>
+                                <h3>Flan. 3,20€</h3>    
+                                <h3>2 bochas de helado. 2€</h3>
+                                <h3>Porción de torta de chocolate. 4€</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <footer class="footer-distributed">
+                    <div class="footer-right">
+                        
+                        <a href="index.html">
+                            <img src="img/logo2.svg" alt=" LOGO">
+                        </a>
+                        
+                    </div>
+
+                    <div class="footer-left">
+  
+                        <p class="footer-links">
+                          <a href="index.html">Inicio</a>
+                          ·
+                          <a href="carta.html">Menu</a>
+                          ·
+                        </p>
+              
+                        <p>Joel Hernández Sierra &copy; 2024</p>
+                        <br><br><br>
+                        <p>Cerdanyola - Barcelona - España</p>
+                      </div>              
+                </footer>
+        </div>
+
+        <script>
+            // URL del XML a GitHub
+            const url = 'https://raw.githubusercontent.com/JoelHernandezSierra/data.xml/main/data.xml';
+        
+            // Funció per carregar el XML i processar-lo
+            fetch(url)
+                .then(response => response.text())
+                .then(data => {
+                    const parser = new DOMParser();
+                    const xmlDoc = parser.parseFromString(data, 'text/xml');
+                    processMenu(xmlDoc);
+                })
+                .catch(error => console.error('Error carregant el XML:', error));
+        
+            // Funció per processar el XML i injectar el contingut a l'HTML
+            function processMenu(xmlDoc) {
+                const cartaContainer = document.getElementById('bodyMenu');
+                const grups = xmlDoc.getElementsByTagName('GRUP');
+        
+                // Recorre cada grup (Entrants, Principals, etc.)
+                Array.from(grups).forEach(grup => {
+                    const nomGrup = grup.getElementsByTagName('NOM')[0].textContent;
+        
+                    // Crea un div per al grup
+                    const grupDiv = document.createElement('div');
+                    grupDiv.classList.add('plato');
+        
+                    const grupTitle = document.createElement('h2');
+                    grupTitle.textContent = nomGrup;
+                    grupDiv.appendChild(grupTitle);
+        
+                    // Obté els plats dins del grup
+                    const plats = grup.getElementsByTagName('PLAT');
+                    Array.from(plats).forEach(plat => {
+                        const nomPlat = plat.getElementsByTagName('NOM')[0].textContent;
+                        const descripcioPlat = plat.getElementsByTagName('DESCRIPCIO')[0].textContent;
+                        const preuPlat = plat.getElementsByTagName('PREU')[0].textContent;
+        
+                        // Crea elements HTML per al plat
+                        const platContainer = document.createElement('div');
+                        platContainer.classList.add('plato1');
+                        
+                        const platTitle = document.createElement('h3');
+                        platTitle.textContent = `${nomPlat} - ${preuPlat}€`;
+                        platContainer.appendChild(platTitle);
+        
+                        const platDesc = document.createElement('p');
+                        platDesc.textContent = descripcioPlat;
+                        platContainer.appendChild(platDesc);
+        
+                        // Afegeix el plat al grup
+                        grupDiv.appendChild(platContainer);
+                    });
+        
+                    // Afegeix el grup complet a la pàgina
+                    cartaContainer.appendChild(grupDiv);
+                });
+            }
+        </script>
+        
+
+    </body>
+</html>
